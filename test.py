@@ -66,8 +66,53 @@ def time_interval_handler(string):
             output['value'] = [d1, d2]
         return output
 
+def ctime(time_str) :
+    if time_str == '' :
+        return '* *'                  
+    return time_str[0:2] + ' ' + time_str[3:5]
+                               
+                               
 def crontime_handler(string):
-    pass
+    output = {'type': 'crontime', 'text': 'token'}
+    extractor = TimeExtraction()
+    result = extractor.run(string)['markers']['datetime']
+    
+    for x in result.keys():
+        crontime_check = re.search('هر', result[x])
+        if crontime_check == None :
+            return None
+        output['span'] = x
+                               
+        tmp2 = extractor.run(result[x])['values']['date2']
+        time ='' 
+        for span, string in tmp.items():
+            time = string                     
+        time = ctime(time)
+        tmp = extractor.run(result[x])['values']['date']
+        for span, string in tmp.items():
+            array = string.split(' ')
+            for i in range(len(array) ) :
+                if array[i] == 'هر' :
+                    break
+            if array[i+1] == 'روز' :
+            return time + ' * 0 0'
+            elif array[i+1] == 'شنبه' :
+                return time + ' * 0 6'
+            elif array[i+1] == 'یکشنبه' :
+                return time + ' * 0 7'
+            elif array[i+1] == 'دوشنبه' :
+                return time + ' * 0 1'
+            elif array[i+1] == 'سه شنبه' :
+                return time + ' * 0 2'
+            elif array[i+1] == 'چهارشنبه' :
+                return time + ' * 0 3'
+            elif array[i+1] == 'پنج شنبه' :
+                return time + ' * 0 4'
+            elif array[i+1] == 'جمعه' :
+                return time + ' * 0 5'
+            elif array[i+1] == 'ماه' :
+                x = re.findall('[0-9]+', date_str)
+                return time + ' * ' + x[0] + ' *'
 
 def exact_handler(string):
     pass
