@@ -4,6 +4,7 @@ import re
 
 
 def date_decod(string):
+    print('\"' + string + '\"')
     functions = [relative_simple_phase_date, absolute_date, relative_day_week, relative_day, relative_week]
     for f in functions:
         if f(string):
@@ -133,6 +134,8 @@ def relative_day_week(string):
     regex_pattern_past2 = '(' + '|'.join(weekdays) + ')' + '\s' +'('+ '|'.join(future) + ")"
     regex_pattern_future2 = '(' + '|'.join(weekdays) + ')' + '\s' + '(' + '|'.join(future) + ")"
     regex_pattern_this_week = '(' + '|'.join(weekdays) + ')'+ '\s'  + "این" + '\s' + 'هفته'
+    regex_pattern_day_week = '(' + '|'.join(weekdays) + ')'
+
     status_future = re.search(regex_pattern_future, string)
     status_past = re.search(regex_pattern_past, string)
     status_future1 = re.search(regex_pattern_future1, string)
@@ -140,13 +143,8 @@ def relative_day_week(string):
     status_past2 = re.search(regex_pattern_past2, string)
     status_future2 = re.search(regex_pattern_future2, string)
     status_this_week = re.search(regex_pattern_this_week, string)
-    
-    if status_this_week:
-        day_number = re.split("\s", string)
-        weekday = (datetime.date.today().weekday() + 2) % 7
-        targetweekday = weekdays.index(day_number[0])
-        shift_num = targetweekday - weekday
-        return day_shift(shift_num, datetime.date.today())
+    status_day_week = re.search(regex_pattern_day_week, string)
+
     if status_future:
         day_number = re.split("\s", string)
         weekday = (datetime.date.today().weekday() + 2) % 7
@@ -182,5 +180,11 @@ def relative_day_week(string):
         weekday = (datetime.date.today().weekday() + 2) % 7
         targetweekday = weekdays.index(day_number[0])
         shift_num = (-6 - weekday + targetweekday ) % 7 - 1
+        return day_shift(shift_num, datetime.date.today())
+    if status_this_week or status_day_week :
+        day_number = re.split("\s", string)
+        weekday = (datetime.date.today().weekday() + 2) % 7
+        targetweekday = weekdays.index(day_number[0])
+        shift_num = targetweekday - weekday
         return day_shift(shift_num, datetime.date.today())
     return None
