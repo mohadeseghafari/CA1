@@ -10,7 +10,7 @@ def interval_decoder(span):
     return [int(span[0]), int(span[1])]
 
 def test():
-    print(run("من و علی از دوشنبه تا یکشنبه دو هفته بعد ساعت سه باید بازی کنیم"))
+    print(run("من و علی دوشنبه ساعت سه بازی کنیم"))
 
 def run(string: str):
     functions = [crontime_handler, time_interval_handler, exact_handler]
@@ -74,7 +74,7 @@ def time_interval_handler(string):
             t2 = datetime.time(int(string[0:2]), int(string[3:5]))
 
         d2 = datetime.datetime.combine(d2, t2)
-        output['value'] = [int(d1.timestamp()), int(d2.timestamp())]
+        output['value'] = [d1.timestamp(), d2.timestamp()]
         return output
 
 def ctime(time_str) :
@@ -121,10 +121,34 @@ def crontime_handler(string):
             elif array[i+1] == 'جمعه' :
                 return time + ' * 0 5'
             elif array[i+1] == 'ماه' :
-                x = re.findall('[0-9]+', date_str)
+                x = re.findall('[0-9]+', string)
                 return time + ' * ' + x[0] + ' *'
 
 def exact_handler(string):
-    pass
+    output = {'type': 'exact', 'text': 'token'}
+
+    extractor = TimeExtraction()
+
+    print(extractor.run(string))
+    result = extractor.run(string)['markers']['datetime']
+    for x, y in result.items():
+        output['span'] = x
+
+    tmp = extractor.run(string)['values']['date']
+    d1 = date.today()
+    for span, date_string in tmp.items():
+        d1 = utility.date_decod(date_string)
+        
+    tmp2 = extractor.run(string)['values']['time']
+    print(tmp2)
+    t1 = datetime.time(0, 0, 0, 0)
+    for span, string in tmp2.items():
+        t1 = datetime.time(int(string[0:2]), int(string[3:5]))
+        
+    
+    d1 = datetime.datetime.combine(d1, t1)
+    output['value'] = d1.timestamp()
+    return output
+    
 
 test()  
