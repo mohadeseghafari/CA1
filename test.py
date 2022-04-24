@@ -10,7 +10,7 @@ def interval_decoder(span):
     return [int(span[0]), int(span[1])]
 
 def test():
-    run("من و علی از فردا تا یکشنبه دو هفته بعد باید بازی کنیم")
+    print(run("من و علی از فردا ساعت دو تا یکشنبه دو هفته بعد ساعت سه باید بازی کنیم"))
 
 def run(string: str):
     functions = [crontime_handler, time_interval_handler, exact_handler]
@@ -20,7 +20,7 @@ def run(string: str):
             return result
     return None
 
-def interval_handler(string):
+def time_interval_handler(string):
     output = {'type': 'duration', 'text': 'token'}
     extractor = TimeExtraction()
     result = extractor.run(string)['markers']['datetime']
@@ -61,3 +61,11 @@ def interval_handler(string):
             second_span[1] += ta_index + 3 + interval_decoder(x)[0]
         output['value'] = [d1, d2]
         return output
+
+def crontime_handler(string):
+    pass
+
+def exact_handler(string):
+    pass
+
+test()  
