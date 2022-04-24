@@ -24,7 +24,7 @@ def time_interval_handler(string):
     output = {'type': 'duration', 'text': 'token'}
     extractor = TimeExtraction()
     result = extractor.run(string)['markers']['datetime']
-    print (result)#-------------------------------------------------------------------------
+    #TODO: find ta
     regex_pattern = '(' + 'از' +'\s)' "?(([ا-ی]*\s)*)\s" + '(تا' ")(\s([ا-ی])*)"
     date_sample = extractor.run(string)['values']['date']
     interval_time = False
