@@ -28,8 +28,6 @@ def time_interval_handler(string):
     print(result)
     #TODO: find ta
 
-    date_sample = extractor.run(string)['values']['date']
-    interval_time = False
     for x in result.keys():
         if result[x][0:3] == 'تا ':
             ta_index = 0
@@ -37,7 +35,6 @@ def time_interval_handler(string):
             ta_index = result[x].find(' تا ') + 1
         else:
             continue
-        interval_time = True
         output['span'] = x
         if result[x][0: 3] == 'از ':
             az_index = 3
@@ -97,7 +94,6 @@ def crontime_handler(string):
             return None
         output['span'] = x
                                
-        tmp2 = extractor.run(result[x])['values']['date2']
         time ='' 
         for span, string in tmp.items():
             time = string                     
