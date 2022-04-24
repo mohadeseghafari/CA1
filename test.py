@@ -56,9 +56,12 @@ def time_interval_handler(string):
             first_span[0] += az_index + interval_decoder(x)[0]
             first_span[1] += az_index + interval_decoder(x)[0]
         tmp2 = extractor.run(first_time)['values']['time']
+
+        t1 = datetime.time(0, 0, 0, 0)
         for span, string in tmp2.items():
-            t1 = datetime.time(int(string[0:2]), int(string[3:5])
-            d1 = datetime.datetime.combine(d1, t1)    
+            t1 = datetime.time(int(string[0:2]), int(string[3:5]))
+        
+        d1 = datetime.datetime.combine(d1, t1)
         d2 = date.today()
                                
         tmp = extractor.run(second_time)['values']['date']
@@ -67,13 +70,14 @@ def time_interval_handler(string):
             second_span = interval_decoder(span)
             second_span[0] += ta_index + 3 + interval_decoder(x)[0]
             second_span[1] += ta_index + 3 + interval_decoder(x)[0]
-            output['value'] = [d1, d2]
         tmp2 = extractor.run(second_time)['values']['time']
+
+        t2 = datetime.time(0, 0, 0, 0)
         for span, string in tmp2.items():
-            t2 = datetime.time(int(string[0:2]), int(string[3:5])
-            d2 = datetime.datetime.combine(d2, t2)                       
-        
-            output['value'] = [d1.timestamp(), d2.timestamp()]
+            t2 = datetime.time(int(string[0:2]), int(string[3:5]))
+
+        d2 = datetime.datetime.combine(d2, t2)
+        output['value'] = [int(d1.timestamp()), int(d2.timestamp())]
         return output
 
 def ctime(time_str) :
@@ -105,7 +109,7 @@ def crontime_handler(string):
                 if array[i] == 'هر' :
                     break
             if array[i+1] == 'روز' :
-            return time + ' * 0 0'
+                return time + ' * 0 0'
             elif array[i+1] == 'شنبه' :
                 return time + ' * 0 6'
             elif array[i+1] == 'یکشنبه' :
