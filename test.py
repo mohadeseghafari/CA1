@@ -55,8 +55,12 @@ def time_interval_handler(string):
             first_span = interval_decoder(span)
             first_span[0] += az_index + interval_decoder(x)[0]
             first_span[1] += az_index + interval_decoder(x)[0]
-            
+        tmp2 = extractor.run(first_time)['values']['time']
+        for span, string in tmp2.items():
+            t1 = datetime.time(int(string[0:2]), int(string[3:5])
+            d1 = datetime.datetime.combine(d1, t1)    
         d2 = date.today()
+                               
         tmp = extractor.run(second_time)['values']['date']
         for span, string in tmp.items():
             d2 = utility.date_decod(string)
@@ -64,6 +68,12 @@ def time_interval_handler(string):
             second_span[0] += ta_index + 3 + interval_decoder(x)[0]
             second_span[1] += ta_index + 3 + interval_decoder(x)[0]
             output['value'] = [d1, d2]
+        tmp2 = extractor.run(second_time)['values']['time']
+        for span, string in tmp2.items():
+            t2 = datetime.time(int(string[0:2]), int(string[3:5])
+            d2 = datetime.datetime.combine(d2, t2)                       
+        
+            output['value'] = [d1.timestamp(), d2.timestamp()]
         return output
 
 def ctime(time_str) :
