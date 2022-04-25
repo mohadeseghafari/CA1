@@ -4,7 +4,7 @@ import re
 
 
 def date_decod(string):
-    print('\"' + string + '\"')
+#     print('\"' + string + '\"')
     functions = [relative_simple_phase_date, absolute_date, relative_day_week, relative_day, relative_week]
     for f in functions:
         if f(string):
