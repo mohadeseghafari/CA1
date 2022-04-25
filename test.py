@@ -10,7 +10,7 @@ def interval_decoder(span):
     return [int(span[0]), int(span[1])]
 
 def test():
-    print(run("من و تو هر هفته به فوتبال میرویم"))
+    print(run("من و تو از سه شنبه هفته قبل تا شنبه هفته بعد ساعت دو  به فوتبال میرویم"))
 
 def run(string: str):
     functions = [crontime_handler, time_interval_handler, exact_handler]
@@ -86,7 +86,7 @@ def time_interval_handler(string):
     extractor = TimeExtraction()
     
     result = extractor.run(string)['markers']['datetime']
-    print(result)
+#     print(result)
     #TODO: find ta
 
     for x in result.keys():
@@ -167,42 +167,57 @@ def crontime_handler(string):
                 if array[i] == 'هر' :
                     break
             if array[i+1] == 'روز' :
-                return time + ' * 0 0'
+                output['value'] = time + ' * 0 0'
+                return output
             elif array[i+1] == 'شنبه' :
-                return time + ' * 0 6'
+                output['value'] =time + ' * 0 6'
+                return output
             elif array[i+1] == 'یکشنبه' :
-                return time + ' * 0 7'
+                output['value'] =time + ' * 0 7'
+                return output
             elif array[i+1] == 'دوشنبه' :
-                return time + ' * 0 1'
+                output['value'] = time + ' * 0 1'
+                return  output
             elif array[i+1] == 'سه شنبه' :
-                return time + ' * 0 2'
+                output['value'] = time + ' * 0 2'
+                return output
             elif array[i+1] == 'چهارشنبه' :
-                return time + ' * 0 3'
+                output['value'] = time + ' * 0 3'
+                return output
             elif array[i+1] == 'پنج شنبه' :
-                return time + ' * 0 4'
+                output['value'] = time + ' * 0 4'
+                return output
             elif array[i+1] == 'جمعه' :
-                return time + ' * 0 5'
+                output['value'] = time + ' * 0 5'
+                return output
             elif array[i+1] == 'ماه' :
+                
                 x = re.findall('[0-9]+', datestring)
-                return time + ' * ' + x[0] + ' *'
+                output['value'] =  time + ' * ' + x[0] + ' *'
+                return output
+            elif array[i+1] == 'هفته' :
+                output['value'] = time + ' * 0 0'
+                return output
+    return None
 
 def exact_handler(string):
     output = {'type': 'exact', 'text': 'token'}
 
     extractor = TimeExtraction()
 
-    print(extractor.run(string))
+#     print(extractor.run(string))
     result = extractor.run(string)['markers']['datetime']
     for x, y in result.items():
         output['span'] = x
 
     tmp = extractor.run(string)['values']['date']
     d1 = date.today()
+
     for span, date_string in tmp.items():
         d1 = utility.date_decod(date_string)
-        
+#         print(date_string)    
     tmp2 = extractor.run(string)['values']['time']
-    print(tmp2)
+#     print(tmp2)
     t1 = datetime.time(0, 0, 0, 0)
     for span, timestring in tmp2.items():
         t1 = handle_time(timestring)
