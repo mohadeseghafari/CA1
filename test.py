@@ -19,7 +19,68 @@ def run(string: str):
         if result: 
             return result
     return None
+def sum_time(sign,h,m,s):
+    now = datetime.now() + sign* timedelta(hours = h, minutes = m, seconds = s )
+    return now.time()
 
+def handle_time(time_str):
+    hour = 0
+    minute =0 
+    second = 0
+    x = re.search('بعد',time_str) 
+    y = re.search('قبل', time_str)
+    if x != None :
+        if x.end() == len(time_str) :
+            
+            a = time_str.split()
+            
+            if a[1] == 'ساعت' :
+                hour = int(a[0])
+            elif a[1] == 'دقیقه':
+                 minute = int(a[0])
+            elif a[1] == 'ثانیه':
+                    second = int(a[0])
+            if len(a) > 4  :    
+                if a[3] == 'دقیقه'  :
+                    minute = int(a[2])
+                elif a[3] == 'ثانیه':
+                    second = int(a[2])
+            if len(a) > 6 :
+                if a[5] == 'ثانیه':
+                    second = int(a[4])
+                    
+            if re.search('یک ربع',time_str)  != None :
+                minute = 15
+            return sum_time(+1,hour,minute,second)
+                
+     
+                
+    elif y != None :
+        if y.end() == len(time_str):
+            a = time_str.split()
+            
+            if a[1] == 'ساعت' :
+                hour = int(a[0])
+            elif a[1] == 'دقیقه':
+                 minute = int(a[0])
+            elif a[1] == 'ثانیه':
+                    second = int(a[0])
+            if len(a) > 4  :    
+                if a[3] == 'دقیقه'  :
+                    minute = int(a[2])
+                elif a[3] == 'ثانیه':
+                    second = int(a[2])
+            if len(a) > 6 :
+                if a[5] == 'ثانیه':
+                    second = int(a[4])
+                    
+            if re.search('یک ربع',time_str)  != None :
+                minute = 15
+            return sum_time(-1,hour,minute,second)
+        
+    else :
+        return datetime.time(int(time_str[0:2]) , int(time_str[3:5]) , int(time_str[6:8]) )
+ 
 def time_interval_handler(string):
     output = {'type': 'duration', 'text': 'token'}
     extractor = TimeExtraction()
@@ -56,7 +117,7 @@ def time_interval_handler(string):
 
         t1 = datetime.time(0, 0, 0, 0)
         for span, string in tmp2.items():
-            t1 = datetime.time(int(string[0:2]), int(string[3:5]))
+            t1 = handle_tme(string)
         
         d1 = datetime.datetime.combine(d1, t1)
         d2 = date.today()
@@ -71,7 +132,7 @@ def time_interval_handler(string):
 
         t2 = datetime.time(0, 0, 0, 0)
         for span, string in tmp2.items():
-            t2 = datetime.time(int(string[0:2]), int(string[3:5]))
+            t2 = handle_tme(string)
 
         d2 = datetime.datetime.combine(d2, t2)
         output['value'] = [d1.timestamp(), d2.timestamp()]
@@ -143,7 +204,7 @@ def exact_handler(string):
     print(tmp2)
     t1 = datetime.time(0, 0, 0, 0)
     for span, string in tmp2.items():
-        t1 = datetime.time(int(string[0:2]), int(string[3:5]))
+        t1 = handle_tme(string)
         
     
     d1 = datetime.datetime.combine(d1, t1)
@@ -151,4 +212,4 @@ def exact_handler(string):
     return output
     
 
-test()  
+test()      
